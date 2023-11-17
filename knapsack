@@ -1,0 +1,49 @@
+#include<iostream>
+using namespace std;
+#include<vector>
+#include<algorithm>
+struct Item{
+    int weight;
+    int value;
+    double ratio;
+};
+bool compare(Item a,Item b){
+     return a.ratio > b.ratio;
+}
+double fractionalKnapsack(int capacity,vector<Item>& items){
+    for(Item& item:items){
+        item.ratio=double(item.value)/item.weight;
+    }
+    sort(items.begin(),items.end(),compare);
+    double totalvalue=0.0;
+    int currentweight=0;
+    for(Item& item:items){
+        if(currentweight+item.weight<=capacity){
+            totalvalue+=item.value;
+            currentweight+=item.weight;
+        }
+        else{
+            double fraction=double(capacity-currentweight)/item.weight;
+            totalvalue+=fraction*item.value;
+            break;
+        }
+    }
+return totalvalue;
+}
+int main(){
+    int capacity;
+    cout<<"enter the capacity";
+    cin>>capacity;
+    int n;
+    cout<<"enter the number of items";
+    cin>>n;
+    vector<Item> items(n);
+    cout<<"enter the weigth and value for each item";
+    for(int i=0;i<n;i++){
+        cout<<"item"<<i+1<<":";
+        cin>>items[i].weight>>items[i].value;
+    }
+    double maxtotal=fractionalKnapsack(capacity,items);
+    cout<<maxtotal<<endl;
+    return 0;
+}
